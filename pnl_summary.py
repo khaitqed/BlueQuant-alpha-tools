@@ -56,13 +56,13 @@ def print_summary(stats):
     std = math.sqrt(var)
     ir = avg_pnl / std
 
-    print("%d-%d   %5.1f  %5.1f %5.1f  %5.1f %5.1f  %0.3f" % (stats.start, stats.end, avg_long * 1e-3, avg_short * 1e-3, stats.total_pnl * 1e-3, tvr * 100, ret * 100, ir))
+    print("%d-%d   %5.1f  %5.1f %8.1f  %5.1f %5.1f  %0.3f" % (stats.start, stats.end, avg_long * 1e-3, avg_short * 1e-3, stats.total_pnl * 1e-3, tvr * 100, ret * 100, ir))
         
 data = load_pnl_file(sys.argv[1])
 all_stats = Stats()
 period_stats = Stats()
 
-print("%8s-%8s   %5s  %5s %5s  %5s %5s  %5s" % ("START", "END", "LONG", "SHORT", "PNL", "TVR", "RET", "IR"))
+print("%8s-%8s   %5s  %5s %8s  %5s %5s  %5s" % ("START", "END", "LONG", "SHORT", "PNL", "TVR", "RET", "IR"))
 reset_stats(all_stats)
 reset_stats(period_stats)
 
