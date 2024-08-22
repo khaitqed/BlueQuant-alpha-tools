@@ -29,7 +29,9 @@ def reset_stats(stats):
     stats.total_short = 0
     stats.total_trade = 0
     stats.start = 0
-    
+    stats.high = 0
+    stats.drawdown = 0
+
 
 def add_daily(daily, stats):
     stats.num += 1
@@ -41,7 +43,11 @@ def add_daily(daily, stats):
     stats.total_long += long
     stats.total_short += short
     stats.total_trade += trade
+    dd = stats.high - stats.total_pnl
+    if (dd > stats.drawdown): stats.drawdown = dd
+    if (stats.total_pnl > stats.high): stats.high = stats.total_pnl
 
+    
 def print_summary(stats):
     n = stats.num
     if (n == 0): return
@@ -50,19 +56,19 @@ def print_summary(stats):
     avg_short = stats.total_short / n
     avg_book = avg_long + avg_short
     avg_trade = stats.total_trade / n
-    ret = avg_pnl / avg_book * 356
-    tvr = avg_trade / avg_book
+    ret = avg_pnl / avg_book * 356 * 100
+    dd = stats.drawdown / avg_book * 100
+    tvr = avg_trade / avg_book * 100
     var = (stats.total_pnl2 - n * avg_pnl * avg_pnl) / (n - 1)
     std = math.sqrt(var)
     ir = avg_pnl / std
-
-    print("%d-%d   %5.1f  %5.1f %8.1f  %5.1f %5.1f  %0.3f" % (stats.start, stats.end, avg_long * 1e-3, avg_short * 1e-3, stats.total_pnl * 1e-3, tvr * 100, ret * 100, ir))
+    print("%d-%d   %5.1f  %5.1f %8.1f  %5.1f  %5.1f  %5.1f  %6.3f" % (stats.start, stats.end, avg_long * 1e-3, avg_short * 1e-3, stats.total_pnl * 1e-3, tvr, ret, dd, ir))
         
 data = load_pnl_file(sys.argv[1])
 all_stats = Stats()
 period_stats = Stats()
 
-print("%8s-%8s   %5s  %5s %8s  %5s %5s  %5s" % ("START", "END", "LONG", "SHORT", "PNL", "TVR", "RET", "IR"))
+print("%8s-%8s   %5s  %5s %8s  %5s  %5s  %5s  %6s" % ("START", "END", "LONG", "SHORT", "PNL", "TVR", "RET", "DD", "SHARPE"))
 reset_stats(all_stats)
 reset_stats(period_stats)
 
