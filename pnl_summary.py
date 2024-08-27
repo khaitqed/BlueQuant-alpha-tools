@@ -56,7 +56,7 @@ def print_summary(stats):
     avg_short = stats.total_short / n
     avg_book = avg_long + avg_short
     avg_trade = stats.total_trade / n
-    ret = avg_pnl / avg_book * 356 * 100
+    ret = avg_pnl / avg_book * 365 * 100
     dd = stats.drawdown / avg_book * 100
     tvr = avg_trade / avg_book * 100
     var = (stats.total_pnl2 - n * avg_pnl * avg_pnl) / (n - 1)
